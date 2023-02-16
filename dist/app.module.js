@@ -11,6 +11,7 @@ const common_1 = require("@nestjs/common");
 const tasks_module_1 = require("./tasks/tasks.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const task_entity_1 = require("./tasks/task.entity");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -28,6 +29,7 @@ AppModule = __decorate([
                 autoLoadEntities: true,
                 synchronize: true,
             }),
+            auth_module_1.AuthModule,
         ],
     })
 ], AppModule);
