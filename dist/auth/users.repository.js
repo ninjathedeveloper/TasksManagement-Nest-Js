@@ -13,6 +13,7 @@ exports.UsersRepository = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
+const bcrypt = require("bcrypt");
 let UsersRepository = class UsersRepository extends typeorm_1.Repository {
     constructor(dataSource) {
         super(user_entity_1.User, dataSource.createEntityManager());
@@ -20,8 +21,20 @@ let UsersRepository = class UsersRepository extends typeorm_1.Repository {
     }
     async createUser(authCredentialsDto) {
         const { userName, password } = authCredentialsDto;
-        const user = this.create({ userName, password });
-        await this.save(user);
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const user = this.create({ userName, password: hashedPassword });
+        try {
+            await this.save(user);
+        }
+        catch (error) {
+            if (error.code === '23505') {
+                throw new common_1.ConflictException('Username already exists');
+            }
+            else {
+                throw new common_1.InternalServerErrorException();
+            }
+        }
     }
 };
 UsersRepository = __decorate([
