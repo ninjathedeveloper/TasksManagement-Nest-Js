@@ -26,7 +26,7 @@ let AuthService = class AuthService {
     }
     async signIn(authCredentialsDto) {
         const { userName, password } = authCredentialsDto;
-        const user = await this.usersRepository.findOne({ userName });
+        const user = await this.usersRepository.findOne({ where: { userName } });
         if (user && (await bcrypt.compare(password, user.password))) {
             return 'Success';
         }
