@@ -12,38 +12,34 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthService = void 0;
+exports.JwtStrategy = void 0;
 const common_1 = require("@nestjs/common");
+const passport_1 = require("@nestjs/passport");
 const typeorm_1 = require("@nestjs/typeorm");
+const passport_jwt_1 = require("passport-jwt");
+const user_entity_1 = require("./user.entity");
 const users_repository_1 = require("./users.repository");
-const bcrypt = require("bcrypt");
-const jwt_1 = require("@nestjs/jwt");
-let AuthService = class AuthService {
-    constructor(usersRepository, jwtService) {
+let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(passport_jwt_1.Strategy) {
+    constructor(usersRepository) {
+        super({
+            secretOrKey: 'topSecret51',
+            jwtFromRequest: passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
+        });
         this.usersRepository = usersRepository;
-        this.jwtService = jwtService;
     }
-    async signUp(authCredentialsDto) {
-        return this.usersRepository.createUser(authCredentialsDto);
-    }
-    async signIn(authCredentialsDto) {
-        const { userName, password } = authCredentialsDto;
+    async validate(payload) {
+        const { userName } = payload;
         const user = await this.usersRepository.findOne({ where: { userName } });
-        if (user && (await bcrypt.compare(password, user.password))) {
-            const payload = { userName };
-            const accessToken = await this.jwtService.sign(payload);
-            return { accessToken };
+        if (!user_entity_1.User) {
+            throw new common_1.UnauthorizedException();
         }
-        else {
-            throw new common_1.UnauthorizedException('Please check your login credentials');
-        }
+        return user;
     }
 };
-AuthService = __decorate([
+JwtStrategy = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(users_repository_1.UsersRepository)),
-    __metadata("design:paramtypes", [users_repository_1.UsersRepository,
-        jwt_1.JwtService])
-], AuthService);
-exports.AuthService = AuthService;
-//# sourceMappingURL=auth.service.js.map
+    __metadata("design:paramtypes", [users_repository_1.UsersRepository])
+], JwtStrategy);
+exports.JwtStrategy = JwtStrategy;
+//# sourceMappingURL=jwt.strategy.js.map
