@@ -6,6 +6,6 @@ import { Task } from './task.entity';
 export declare class TaskRepository extends Repository<Task> {
     private dataSource;
     constructor(dataSource: DataSource);
-    getTasks(filterDto: GetTasksFilterDto): Promise<Task[]>;
+    getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]>;
     createTask({ title, description }: CreateTaskDto, user: User): Promise<Task>;
 }

@@ -7,9 +7,9 @@ import { TasksService } from './tasks.service';
 export declare class TasksController {
     private tasksService;
     constructor(tasksService: TasksService);
-    getTasks(filterDto: GetTasksFilterDto): Promise<Task[]>;
-    getTaskById(id: string): Promise<Task>;
+    getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]>;
+    getTaskById(id: string, user: User): Promise<Task>;
     createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task>;
-    deleteTask(id: string): Promise<void>;
-    updateTaskStatus(id: string, UpdateTaskStatusDto: UpdateTaskStatusDto): Promise<Task>;
+    deleteTask(id: string, user: User): Promise<void>;
+    updateTaskStatus(id: string, UpdateTaskStatusDto: UpdateTaskStatusDto, user: User): Promise<Task>;
 }

@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Task = void 0;
+const class_transformer_1 = require("class-transformer");
 const user_entity_1 = require("../auth/user.entity");
 const typeorm_1 = require("typeorm");
 const task_status_enum_1 = require("./task-status.enum");
@@ -33,6 +34,7 @@ __decorate([
 ], Task.prototype, "status", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(_type => user_entity_1.User, user => user.tasks, { eager: false }),
+    (0, class_transformer_1.Exclude)({ toPlainOnly: true }),
     __metadata("design:type", user_entity_1.User)
 ], Task.prototype, "user", void 0);
 Task = __decorate([

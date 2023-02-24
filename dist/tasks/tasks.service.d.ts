@@ -7,9 +7,9 @@ import { User } from 'src/auth/user.entity';
 export declare class TasksService {
     private readonly tasksRepository;
     constructor(tasksRepository: TaskRepository);
-    getTasks(filterDto: GetTasksFilterDto): Promise<Task[]>;
-    getTaskById(id: string): Promise<Task>;
+    getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]>;
+    getTaskById(id: string, user: User): Promise<Task>;
     createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task>;
-    deleteTask(id: string): Promise<void>;
-    updateTaskStatus(id: string, status: TaskStatus): Promise<Task>;
+    deleteTask(id: string, user: User): Promise<void>;
+    updateTaskStatus(id: string, status: TaskStatus, user: User): Promise<Task>;
 }
