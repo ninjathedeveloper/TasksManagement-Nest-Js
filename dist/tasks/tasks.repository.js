@@ -31,11 +31,12 @@ let TaskRepository = class TaskRepository extends typeorm_1.Repository {
         const tasks = await query.getMany();
         return tasks;
     }
-    async createTask({ title, description }) {
+    async createTask({ title, description }, user) {
         const task = this.create({
             title,
             description,
             status: task_status_enum_1.TaskStatus.OPEN,
+            user,
         });
         await this.save(task);
         return task;

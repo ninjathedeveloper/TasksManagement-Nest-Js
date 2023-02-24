@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString, Matches, MaxLength, MinLength } from "class-valid
 export class AuthCredentialsDto {
 
     @IsNotEmpty()
-    @MinLength(8)
+    @MinLength(5)
     @MaxLength(20)
     @IsString()
     userName: string;

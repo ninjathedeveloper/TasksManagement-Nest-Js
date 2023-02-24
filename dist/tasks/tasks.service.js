@@ -26,8 +26,8 @@ let TasksService = class TasksService {
         }
         return found;
     }
-    createTask(createTaskDto) {
-        return this.tasksRepository.createTask(createTaskDto);
+    createTask(createTaskDto, user) {
+        return this.tasksRepository.createTask(createTaskDto, user);
     }
     async deleteTask(id) {
         const result = await this.tasksRepository.delete(id);

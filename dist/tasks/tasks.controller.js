@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.TasksController = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
+const get_user_decorator_1 = require("../auth/get-user.decorator");
+const user_entity_1 = require("../auth/user.entity");
 const create_task_dto_1 = require("./dto/create-task.dto");
 const get_tasks_filter_dto_1 = require("./dto/get-tasks-filter.dto");
 const update_task_status_dto_1 = require("./dto/update-task-status.dto");
@@ -29,8 +31,8 @@ let TasksController = class TasksController {
     getTaskById(id) {
         return this.tasksService.getTaskById(id);
     }
-    createTask(createTaskDto) {
-        return this.tasksService.createTask(createTaskDto);
+    createTask(createTaskDto, user) {
+        return this.tasksService.createTask(createTaskDto, user);
     }
     deleteTask(id) {
         return this.tasksService.deleteTask(id);
@@ -57,8 +59,9 @@ __decorate([
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, get_user_decorator_1.GetUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDto]),
+    __metadata("design:paramtypes", [create_task_dto_1.CreateTaskDto, user_entity_1.User]),
     __metadata("design:returntype", Promise)
 ], TasksController.prototype, "createTask", null);
 __decorate([

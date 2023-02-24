@@ -15,7 +15,7 @@ class AuthCredentialsDto {
 }
 __decorate([
     (0, class_validator_1.IsNotEmpty)(),
-    (0, class_validator_1.MinLength)(8),
+    (0, class_validator_1.MinLength)(5),
     (0, class_validator_1.MaxLength)(20),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
