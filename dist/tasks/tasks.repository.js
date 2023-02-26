@@ -18,6 +18,7 @@ let TaskRepository = class TaskRepository extends typeorm_1.Repository {
     constructor(dataSource) {
         super(task_entity_1.Task, dataSource.createEntityManager());
         this.dataSource = dataSource;
+        this.logger = new common_1.Logger('TasksRepository');
     }
     async getTasks(filterDto, user) {
         const { status, search } = filterDto;
@@ -29,8 +30,14 @@ let TaskRepository = class TaskRepository extends typeorm_1.Repository {
         if (search) {
             query.andWhere('(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search))', { search: `%${search}%` });
         }
-        const tasks = await query.getMany();
-        return tasks;
+        try {
+            const tasks = await query.getMany();
+            return tasks;
+        }
+        catch (error) {
+            this.logger.error(`Failed to get tasks for user "${user.userName}". Filters: ${JSON.stringify(filterDto)}`, error.stack);
+            throw new common_1.InternalServerErrorException();
+        }
     }
     async createTask({ title, description }, user) {
         const task = this.create({
