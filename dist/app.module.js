@@ -10,24 +10,32 @@ exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const tasks_module_1 = require("./tasks/tasks.module");
 const typeorm_1 = require("@nestjs/typeorm");
-const task_entity_1 = require("./tasks/task.entity");
 const auth_module_1 = require("./auth/auth.module");
+const config_1 = require("@nestjs/config");
+const config_schema_1 = require("./config.schema");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            config_1.ConfigModule.forRoot({
+                envFilePath: [`.env.stage.${process.env.STAGE}`],
+                validationSchema: config_schema_1.configValidationSchema,
+            }),
             tasks_module_1.TasksModule,
-            typeorm_1.TypeOrmModule.forRoot({
-                type: 'postgres',
-                host: 'localhost',
-                port: 5432,
-                username: 'postgres',
-                password: 'postgres',
-                database: 'task-management',
-                entities: [task_entity_1.Task],
-                autoLoadEntities: true,
-                synchronize: true,
+            typeorm_1.TypeOrmModule.forRootAsync({
+                imports: [config_1.ConfigModule],
+                inject: [config_1.ConfigService],
+                useFactory: async (configService) => ({
+                    type: 'postgres',
+                    autoLoadEntities: true,
+                    synchronize: true,
+                    host: configService.get('DB_HOST'),
+                    port: configService.get('DB_PORT'),
+                    username: configService.get('DB_USERNAME'),
+                    password: configService.get('DB_PASSWORD'),
+                    database: configService.get('DB_DATABASE'),
+                }),
             }),
             auth_module_1.AuthModule,
         ],
