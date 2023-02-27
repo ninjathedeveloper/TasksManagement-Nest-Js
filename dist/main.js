@@ -7,6 +7,7 @@ const transform_interceptor_1 = require("./transform.interceptor");
 async function bootstrap() {
     const logger = new common_1.Logger();
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
+    app.enableCors();
     app.useGlobalPipes(new common_1.ValidationPipe());
     app.useGlobalInterceptors(new transform_interceptor_1.TransformInterceptor());
     const port = 3000;
